@@ -2,6 +2,9 @@ import Hero from "./_components/Hero";
 import Newest from "./_components/Newest";
 import { MotionDiv } from "./framer";
 
+
+export const dynamic="force-dynamic"
+
 export default function Home() {
   return (
   <MotionDiv className="bg-white pb-6 sm:pb-8 lg:pb-12"

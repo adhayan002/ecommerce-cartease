@@ -8,17 +8,33 @@ import Image from "next/image"
 export const dynamic="force-dynamic"
 
 async function getData(category:string) {
-    const query=`*[_type=="product" && category->name=="${category}"]{
-        _id,
-        "imageUrl":images[0].asset->url,
-        price,
-        name,
-        "slug":slug.current,
-        "categoryName":category->name
-    }`
+    if(category==="all"){
+        const query=`*[_type=="product"]{
+            _id,
+            "imageUrl":images[0].asset->url,
+            price,
+            name,
+            "slug":slug.current,
+            "categoryName":category->name
+        }`
+        const data=await client.fetch(query)
+        return data
 
-    const data=await client.fetch(query)
-    return data
+    }
+    else{
+        const query=`*[_type=="product" && category->name=="${category}"]{
+            _id,
+            "imageUrl":images[0].asset->url,
+            price,
+            name,
+            "slug":slug.current,
+            "categoryName":category->name
+        }`
+    
+        const data=await client.fetch(query)
+        return data
+    }
+   
 
 }
 
@@ -28,7 +44,7 @@ export default async function CategoryItem({params}:{params:{category:string}}) 
     <div className='bg-white'>
         <div className='mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8'>
             <div className='flex justify-between items-between'>
-                <h2 className='text-2xl font-bold tracking-tight text-gray-900'>{params.category}'s Products</h2>
+                <h2 className='text-2xl font-bold tracking-tight text-gray-900'>{params.category.toLowerCase() === "all" ? "All Products" : params.category + "'s Products"}</h2>
             </div>
 
             <div className='mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8'>
